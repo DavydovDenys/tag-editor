@@ -1,0 +1,84 @@
+<%= tag.div data: {controller: 'hello'} do %>
+  <p>Tag</p>
+<% end %>
+
+<%= tag.h1 'Home', data: {controller: 'homes'} %>
+<p>Find me in app/views/home/home.html.erb</p>
+
+<% image_tag('cover', size: "200") %>
+
+
+<form action='<%= homes_search_url %>' id='search' data-controller="homes">
+    <label for='query'>Search for</label>
+    <input type='test' name='query'>
+    <input type="submit"/>
+</form>
+
+<%= form_with url: homes_search_url, method: :get do |form| %>
+  <%= form.label :query, "Search for:" %>
+  <%= form.text_field :query %>
+  <%= form.submit "Search" %>
+<% end %>
+
+<% if @data %>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Tracks</th>
+        <th>Label</th>
+        <th>Country</th>
+        <th>Released</th>
+        <th>Genre</th>
+        <th>Style</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @data.results.each do |d| %>
+        <%#binding.pry%>
+        <% @release = @auth_wrapper.get_release(d.id) %>
+        <tr>
+          <td><%= d.title.split('-').last.strip %></td>
+          <td><%= d.title.split('-').first.strip %></td>
+          <td><%= @release.tracklist.size %></td>
+          <td><%= @release.labels.map { |l| l.name }.split.join(', ') %></td>
+          <td><%= d.country %></td>
+          <td><%= @release.released %></td>
+          <td><%= d.genre.split.join(', ').strip %></td>
+          <td><%= d.style.split.join(', ').strip %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No results to display :(</p>
+<% end %>
+
+
+<%# <script>
+  document.getElementById('test').onclick = test
+
+  function test() {
+    console.log('test');
+  }
+</script> %>
+
+<%# <script>
+  function fetchDataPiece(url) {
+    fetch(url)
+      .then((response) => {
+        console.log(response.json())
+      })
+      .then(data => {
+        console.log(data)
+        // Update your HTML content with the received data
+        //document.getElementById("data-container").innerHTML += data;
+      })
+      .catch(error => console.error(error));
+  }
+
+  // Call the function repeatedly or based on your logic
+  console.log(fetchDataPiece("http://localhost:3000/home/search?query=atb+-+my+dream&commit=Search"));
+</script> %>

@@ -1,0 +1,39 @@
+<% if @data %>
+  <div class='data-container'>
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Tracks</th>
+        <th>Label</th>
+        <th>Country</th>
+        <th>Released</th>
+        <th>Genre</th>
+        <th>Style</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @data.results.each do |d| %>
+        <%#binding.pry%>
+        <% @release = @auth_wrapper.get_release(d.id) %>
+        <tr>
+          <td><%= image_tag(d.cover_image, size: 100) %></td>
+          <td><%= d.title.split('-').last.strip %></td>
+          <td><%= d.title.split('-').first.strip %></td>
+          <td><%= @release.tracklist&.size %></td>
+          <td><%= @release.labels&.map { |l| l&.name }&.split&.join(', ')[..35] %></td>
+          <td><%= d.country %></td>
+          <td><%= @release.released %></td>
+          <td><%= d.genre.split.join(', ').strip %></td>
+          <td><%= d.style.split.join(', ').strip %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
+<% else %>
+  <p>No results to display :(</p>
+<% end %>

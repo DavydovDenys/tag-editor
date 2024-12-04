@@ -1,0 +1,21 @@
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: api
+  password: api
+
+development:
+  <<: *default
+  database: tag_editor_development
+
+test:
+  <<: *default
+  database: tag_editor_test
+
+production:
+  <<: *default
+  database: tag_editor_production
+  username: tag_editor
+  password: <%= ENV["TAG_EDITOR_DATABASE_PASSWORD"] %>
